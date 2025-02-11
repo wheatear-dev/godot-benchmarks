@@ -1,11 +1,11 @@
-volumes:
-  files:
-
 services:
-  init-files:
+  http:
     image: nginx
-    volumes:
-      - "files:/usr/src/files:rw"
     working_dir: /usr/src
-    entrypoint: ""
-    command: dd if=/dev/zero bs=8M count=128 status=progress | openssl enc -aes-256-ctr -pass pass:"godot" -nosalt -out 1GB.bin
+    volumes:
+      - "./entrypoint.sh:/usr/src/entrypoint.sh:ro"
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    entrypoint: ["/usr/src/entrypoint.sh"]
+    command: ["nginx", "-g", "daemon off;"]
+    ports:
+      - "8080:80"
