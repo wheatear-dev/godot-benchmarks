@@ -1,0 +1,11 @@
+volumes:
+  files:
+
+services:
+  init-files:
+    image: nginx
+    volumes:
+      - "files:/usr/src/files:rw"
+    working_dir: /usr/src
+    entrypoint: ""
+    command: dd if=/dev/zero bs=8M count=128 status=progress | openssl enc -aes-256-ctr -pass pass:"godot" -nosalt -out 1GB.bin
